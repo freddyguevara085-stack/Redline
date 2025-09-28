@@ -16,21 +16,30 @@ class HistoryCoverUploadTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_it_rejects_cover_with_small_dimensions(): void
+    public function test_it_accepts_small_cover_and_stores_it(): void
     {
         Storage::fake('public');
 
         $user = User::factory()->create();
-        $initialCount = History::count();
+        $category = Category::factory()->create();
 
         $response = $this->actingAs($user)->post(route('historia.store'), [
-            'title' => 'Historia con miniatura inválida',
+            'title' => 'Historia con portada pequeña',
             'content' => 'Contenido obligatorio para crear la historia.',
-            'cover' => UploadedFile::fake()->image('tiny.jpg', 400, 300),
+            'category_id' => $category->id,
+            'cover' => UploadedFile::fake()->image('tiny.jpg', 400, 300)->size(256),
         ]);
 
-        $response->assertSessionHasErrors('cover');
-        $this->assertSame($initialCount, History::count());
+        $response->assertRedirect();
+
+        $history = History::where('title', 'Historia con portada pequeña')->first();
+        $this->assertNotNull($history);
+
+        Storage::disk('public')->assertExists(ltrim($history->cover_path, '/'));
+
+        $image = Image::make(Storage::disk('public')->get(ltrim($history->cover_path, '/')));
+        $this->assertSame(400, $image->width());
+        $this->assertSame(300, $image->height());
     }
 
     public function test_it_processes_and_stores_cover_image(): void

@@ -13,11 +13,7 @@ use App\Support\VideoEmbed;
 
 class HistoryController extends Controller
 {
-    private const COVER_MAX_FILE_SIZE_KB = 8192;
-    private const COVER_MIN_WIDTH = 800;
-    private const COVER_MIN_HEIGHT = 600;
-    private const COVER_MAX_WIDTH = 3200;
-    private const COVER_MAX_HEIGHT = 3200;
+    private const COVER_MAX_FILE_SIZE_KB = 20480;
 
     public function __construct()
     {
@@ -134,7 +130,7 @@ class HistoryController extends Controller
             'content' => 'required',
             'era' => 'nullable|max:120',
             'leading_figure' => 'nullable|max:160',
-            'cover' => 'nullable|image|max:' . self::COVER_MAX_FILE_SIZE_KB . '|dimensions:min_width=' . self::COVER_MIN_WIDTH . ',min_height=' . self::COVER_MIN_HEIGHT . ',max_width=' . self::COVER_MAX_WIDTH . ',max_height=' . self::COVER_MAX_HEIGHT,
+            'cover' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:' . self::COVER_MAX_FILE_SIZE_KB,
             'video_url' => ['nullable', 'url', 'max:255', function ($attribute, $value, $fail) {
                 if (! VideoEmbed::toEmbedUrl($value)) {
                     $fail('El video debe ser un enlace válido de YouTube o Vimeo.');
@@ -197,7 +193,7 @@ class HistoryController extends Controller
             'content' => 'required',
             'era' => 'nullable|max:120',
             'leading_figure' => 'nullable|max:160',
-            'cover' => 'nullable|image|max:' . self::COVER_MAX_FILE_SIZE_KB . '|dimensions:min_width=' . self::COVER_MIN_WIDTH . ',min_height=' . self::COVER_MIN_HEIGHT . ',max_width=' . self::COVER_MAX_WIDTH . ',max_height=' . self::COVER_MAX_HEIGHT,
+            'cover' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:' . self::COVER_MAX_FILE_SIZE_KB,
             'video_url' => ['nullable', 'url', 'max:255', function ($attribute, $value, $fail) {
                 if (! VideoEmbed::toEmbedUrl($value)) {
                     $fail('El video debe ser un enlace válido de YouTube o Vimeo.');

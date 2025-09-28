@@ -52,7 +52,7 @@
   <div class="form-group">
     <x-label for="cover" :value="'Imagen de portada'" />
     <input id="cover" type="file" name="cover" class="input" accept="image/png,image/jpeg,image/webp">
-  <p class="form-hint">Formatos JPG/PNG/WebP, mínimo 800×600px y máximo 8&nbsp;MB.</p>
+  <p class="form-hint">Formatos JPG/PNG/WebP (hasta 20&nbsp;MB). Se ajusta automáticamente al tamaño ideal.</p>
   </div>
 
   @if(optional($historia)->cover_url)
