@@ -112,16 +112,7 @@ Cada pantalla mantiene una estructura coherente basada en Blade y Tailwind.
 
 Consulta `docs/DB_DIAGRAM.md` para una descripción de tablas y relaciones y un ejemplo en Mermaid.
 
-## Video demo
-
-Graba un recorrido corto (1–3 min) mostrando:
-- Alta de una historia con portada y video.
-- Creación de un recurso en Biblioteca.
-- Juego rápido y visualización de ranking.
-
-Sugerencias:
-- Usa herramientas como OBS, Xbox Game Bar (Windows) o QuickTime (macOS).
-- Sube el video a un servicio (YouTube no listado o Drive) y vincúlalo aquí cuando esté listo.
+<!-- Sección de video demo eliminada a solicitud del autor -->
 
 ## Checklist de despliegue
 
