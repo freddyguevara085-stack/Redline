@@ -5,7 +5,7 @@ Modelo acorde a las migraciones actuales.
 ## Tablas principales (campos clave)
 - users (id, name, email, password, ...)
 - categories (id, name, slug)
-- histories (id, user_id, category_id?, title, slug, excerpt?, content, cover_path?, era?, leading_figure?, video_url?)
+- histories (id, user_id, category_id?, title, slug, excerpt?, content, cover_path?, era?, leading_figure?, video_url?, video_path?)
 - library_items (id, user_id, title, type, description?, cover_path?, file_path?, external_url?, video_url?, video_caption?)
 - comments (id, commentable_id, commentable_type, user_id, body, vote)
 - games (id, user_id, title, description?, points_per_question)

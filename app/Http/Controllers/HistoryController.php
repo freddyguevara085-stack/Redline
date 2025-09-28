@@ -12,7 +12,7 @@ use App\Support\VideoEmbed;
 
 class HistoryController extends Controller
 {
-    private const COVER_MAX_FILE_SIZE_KB = 3072;
+    private const COVER_MAX_FILE_SIZE_KB = 8192;
     private const COVER_MIN_WIDTH = 800;
     private const COVER_MIN_HEIGHT = 600;
     private const COVER_MAX_WIDTH = 3200;
@@ -218,6 +218,23 @@ class HistoryController extends Controller
         $historia->delete();
 
         return redirect()->route('historia.index')->with('ok', 'Eliminado');
+    }
+
+    public function cover(History $historia)
+    {
+        if (! $historia->cover_path || ! Storage::disk('public')->exists($historia->cover_path)) {
+            abort(404);
+        }
+
+        $disk = Storage::disk('public');
+        $contents = $disk->get($historia->cover_path);
+        $mimeType = $disk->mimeType($historia->cover_path) ?? 'image/jpeg';
+
+        return response($contents, 200, [
+            'Content-Type' => $mimeType,
+            'Content-Length' => strlen($contents),
+            'Cache-Control' => 'max-age=604800, public',
+        ]);
     }
 
     protected function storeCover(UploadedFile $file): string

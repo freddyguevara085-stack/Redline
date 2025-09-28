@@ -7,8 +7,8 @@
       <h2>{{ $historia->title }}</h2>
       <a href="{{ route('historia.index') }}" class="link-ghost">Volver al listado</a>
     </div>
-    @if($historia->cover_path)
-      <img src="{{ asset('storage/'.ltrim($historia->cover_path, '/')) }}" class="collection-cover" alt="Portada de {{ $historia->title }}">
+    @if($historia->cover_url)
+      <img src="{{ $historia->cover_url }}" class="collection-cover" alt="Portada de {{ $historia->title }}">
     @endif
     @if($historia->video_embed_url)
       <div class="video-embed" style="margin-top: 1.5rem; border-radius: 1rem; overflow: hidden; position: relative; padding-bottom: 56.25%; height: 0; box-shadow: var(--shadow-md);">

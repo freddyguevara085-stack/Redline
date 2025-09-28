@@ -79,10 +79,29 @@ class HistoryCoverUploadTest extends TestCase
 
         $response->assertRedirect();
 
-    Storage::disk('public')->assertMissing('covers/original.jpg');
+        Storage::disk('public')->assertMissing('covers/original.jpg');
 
         $history->refresh();
-    Storage::disk('public')->assertExists(ltrim($history->cover_path, '/'));
+        Storage::disk('public')->assertExists(ltrim($history->cover_path, '/'));
         $this->assertTrue(Str::endsWith($history->cover_path, '.jpg'));
+    }
+
+    public function test_cover_route_returns_processed_image(): void
+    {
+        Storage::fake('public');
+
+        $user = User::factory()->create();
+        $history = History::factory()->for($user, 'author')->create([
+            'cover_path' => 'covers/example.jpg',
+        ]);
+
+        $fakeImage = UploadedFile::fake()->image('example.jpg', 1200, 900);
+        Storage::disk('public')->put($history->cover_path, file_get_contents($fakeImage->getRealPath()));
+
+        $response = $this->get(route('historia.cover', $history));
+
+        $response->assertOk();
+        $response->assertHeader('Cache-Control', 'max-age=604800, public');
+        $response->assertHeader('Content-Type', 'image/jpeg');
     }
 }

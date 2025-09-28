@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Support\VideoEmbed;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
 
 class History extends Model {
     use HasFactory;
@@ -41,4 +43,21 @@ class History extends Model {
     {
         return VideoEmbed::toEmbedUrl($this->video_url);
     }
-}
+
+    public function getCoverUrlAttribute(): ?string
+    {
+        if (! $this->cover_path) {
+            return null;
+        }
+
+        if (! Storage::disk('public')->exists($this->cover_path)) {
+            return null;
+        }
+
+        if (Route::has('historia.cover')) {
+            return route('historia.cover', $this);
+        }
+
+        return Storage::disk('public')->url($this->cover_path);
+    }
+    }

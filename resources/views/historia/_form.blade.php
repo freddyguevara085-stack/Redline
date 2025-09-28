@@ -52,13 +52,13 @@
   <div class="form-group">
     <x-label for="cover" :value="'Imagen de portada'" />
     <input id="cover" type="file" name="cover" class="input" accept="image/png,image/jpeg,image/webp">
-    <p class="form-hint">Formatos JPG/PNG/WebP, mínimo 800×600px y máximo 3&nbsp;MB.</p>
+  <p class="form-hint">Formatos JPG/PNG/WebP, mínimo 800×600px y máximo 8&nbsp;MB.</p>
   </div>
 
-  @if(optional($historia)->cover_path)
+  @if(optional($historia)->cover_url)
     <div class="form-group">
       <x-label :value="'Portada actual'" />
-      <img src="{{ asset('storage/'.ltrim($historia->cover_path, '/')) }}" alt="Portada actual" style="max-width: 320px; border-radius: 12px; box-shadow: var(--shadow-sm);">
+      <img src="{{ $historia->cover_url }}" alt="Portada actual" style="max-width: 320px; border-radius: 12px; box-shadow: var(--shadow-sm);">
       <p class="form-hint">Se reemplazará si subes una imagen nueva.</p>
     </div>
   @endif

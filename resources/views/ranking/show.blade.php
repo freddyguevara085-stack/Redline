@@ -13,9 +13,9 @@
   </div>
 
   <section class="glass-panel article-surface">
-    @if($historia->cover_path)
+    @if($historia->cover_url)
       <div class="article-cover">
-        <img src="{{ asset('storage/'.$historia->cover_path) }}" alt="{{ $historia->title }}">
+        <img src="{{ $historia->cover_url }}" alt="{{ $historia->title }}">
       </div>
     @endif
 

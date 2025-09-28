@@ -22,7 +22,7 @@
         </div>
       </div>
     </div>
-    <aside class="hero-spotlight-card" @if($spotlightStory?->cover_path) style="--spotlight-cover: url('{{ asset('storage/'.$spotlightStory->cover_path) }}');" @endif>
+    <aside class="hero-spotlight-card" @if($spotlightStory?->cover_url) style="--spotlight-cover: url('{{ $spotlightStory->cover_url }}');" @endif>
       <div class="hero-spotlight-card__overlay">
         <span class="cta-eyebrow">Destacada automática</span>
         @if($spotlightStory)
@@ -123,8 +123,8 @@
         @foreach($featuredStories as $featured)
           <article class="featured-card">
             <div class="featured-card__media">
-              @if($featured->cover_path)
-                <img src="{{ asset('storage/'.$featured->cover_path) }}" alt="Portada de {{ $featured->title }}">
+              @if($featured->cover_url)
+                <img src="{{ $featured->cover_url }}" alt="Portada de {{ $featured->title }}">
               @else
                 <div class="featured-card__placeholder">
                   <span>{{ mb_strtoupper(mb_substr($featured->title, 0, 1)) }}</span>
@@ -168,8 +168,8 @@
     <div class="collection-grid">
       @forelse($items as $item)
         <article class="collection-card">
-          @if($item->cover_path)
-            <img src="{{ asset('storage/'.$item->cover_path) }}" alt="Portada de {{ $item->title }}" class="collection-cover">
+          @if($item->cover_url)
+            <img src="{{ $item->cover_url }}" alt="Portada de {{ $item->title }}" class="collection-cover">
           @endif
           <div class="collection-meta">
             <span>{{ $item->category->name ?? 'Sin categoría' }}</span>

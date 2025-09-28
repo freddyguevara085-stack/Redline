@@ -6,17 +6,22 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    public function up(): void
-    {
-        Schema::table('histories', function (Blueprint $table) {
-            $table->string('video_path')->nullable()->after('cover_path');
-        });
-    }
+	public function up(): void
+	{
+		Schema::table('histories', function (Blueprint $table) {
+			if (! Schema::hasColumn('histories', 'video_path')) {
+				$table->string('video_path')->nullable()->after('video_url');
+			}
+		});
+	}
 
-    public function down(): void
-    {
-        Schema::table('histories', function (Blueprint $table) {
-            $table->dropColumn('video_path');
-        });
-    }
+	public function down(): void
+	{
+		Schema::table('histories', function (Blueprint $table) {
+			if (Schema::hasColumn('histories', 'video_path')) {
+				$table->dropColumn('video_path');
+			}
+		});
+	}
 };
+

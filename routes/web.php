@@ -29,6 +29,7 @@ use App\Http\Controllers\NewsController;
 use App\Http\Controllers\RankingController;
 use App\Http\Controllers\EventController;
 
+Route::get('historia/{historia}/cover', [HistoryController::class, 'cover'])->name('historia.cover');
 Route::resource('historia', HistoryController::class)->parameters(['historia' => 'historia']);
 Route::post('historia/{historia}/comentarios', [HistoryController::class, 'addComment'])
     ->middleware(['auth','throttle:5,1'])
