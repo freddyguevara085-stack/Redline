@@ -96,4 +96,4 @@ Esto generará los archivos minificados en `public/css` y `public/js`.
 
 ## Licencia
 
-Este proyecto se distribuye bajo la licencia MIT. Consulta el archivo `LICENSE` para más detalles.
+Este proyecto se distribuye bajo la licencia MIT. Consulta el archivo `LICENSE` para el texto completo.
