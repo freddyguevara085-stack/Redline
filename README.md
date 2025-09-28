@@ -60,6 +60,27 @@ El proyecto incluye pruebas de características enfocadas en los flujos multimed
 php vendor/bin/phpunit
 ```
 
+## Evidencia de control de versiones (Git / GitHub)
+
+- Remoto configurado: `origin` → https://github.com/freddyguevara085-stack/Redline.git
+- Ramas:
+	- `main` (rama por defecto)
+- Historial reciente (últimos commits):
+
+```
+* af33ee4 (HEAD -> main, origin/main) Añade licencia MIT
+* 7edd334 Primer commit
+```
+
+Buenas prácticas aplicadas:
+- Se excluyen secretos como `.env` y directorios generados (`vendor/`, `storage/`) mediante `.gitignore`.
+- Commits con mensajes descriptivos.
+- README y documentación en `docs/` para facilitar colaboración.
+
+## Guía de Usuario Rápida
+
+Consulta `docs/USER_GUIDE.md` para una guía paso a paso de uso desde la interfaz.
+
 ## Construcción de assets para producción
 
 La compilación optimizada utiliza Laravel Mix y el script `prod`:
@@ -69,6 +90,38 @@ npm run prod
 ```
 
 Esto generará los archivos minificados en `public/css` y `public/js`.
+
+## Diseño de la interfaz (3 pantallas)
+
+La aplicación incluye navegación entre páginas principales a través del menú:
+- Historias (`/historia`): listado y detalle con portada y video.
+- Biblioteca (`/biblioteca`): recursos tipo archivo, enlace y video.
+- Juegos (`/juegos`): acceso al juego/quiz y ranking.
+
+Cada pantalla mantiene una estructura coherente basada en Blade y Tailwind.
+
+## Funcionalidades del reto
+
+- Gestión de Historias con portada optimizada y video (archivo o URL YouTube/Vimeo).
+- Biblioteca multimedia con archivos descargables, enlaces externos y videos embebidos.
+- Comentarios moderados para usuarios autenticados.
+- Juegos tipo quiz con preguntas, opciones, puntaje y ranking.
+- Panel administrativo para CRUDs principales.
+
+## Diagramación de la base de datos
+
+Consulta `docs/DB_DIAGRAM.md` para una descripción de tablas y relaciones y un ejemplo en Mermaid.
+
+## Video demo
+
+Graba un recorrido corto (1–3 min) mostrando:
+- Alta de una historia con portada y video.
+- Creación de un recurso en Biblioteca.
+- Juego rápido y visualización de ranking.
+
+Sugerencias:
+- Usa herramientas como OBS, Xbox Game Bar (Windows) o QuickTime (macOS).
+- Sube el video a un servicio (YouTube no listado o Drive) y vincúlalo aquí cuando esté listo.
 
 ## Checklist de despliegue
 
