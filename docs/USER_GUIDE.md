@@ -1,18 +1,18 @@
 # Guía de Usuario Rápida
 
-Esta guía te muestra, paso a paso, cómo utilizar Redline v5 desde la interfaz web.
+Cómo utilizar Redline v5 desde la interfaz web, paso a paso.
 
 ## Acceso y navegación
 - Ingresa a la URL del sitio (local: http://localhost:8000 o tu dominio en producción).
 - Menú principal:
-  - Historias: explora y busca historias; cada historia muestra portada, descripción y video (si aplica).
-  - Noticias: revisa publicaciones recientes.
-  - Calendario/Eventos: consulta eventos próximos.
-  - Biblioteca: recursos descargables, enlaces externos y videos embebidos.
-  - Juegos/Quiz: participa en trivias con ranking.
+  - Historias: listado, detalle, portada, descripción y video.
+  - Noticias: publicaciones recientes.
+  - Calendario/Eventos: próximos eventos.
+  - Biblioteca: archivos, enlaces externos y videos embebidos.
+  - Juegos/Quiz: trivias con ranking.
 
 ## Flujos clave
-- Crear historia (requiere autenticación y permisos):
+- Crear historia (requiere autenticación con permisos):
   1) Ir a Dashboard → Historias → Crear.
   2) Completar título, descripción, portada (JPG/PNG) y video (archivo o URL de YouTube/Vimeo).
   3) Guardar. La historia aparecerá en el listado público si está publicada.
@@ -28,8 +28,8 @@ Esta guía te muestra, paso a paso, cómo utilizar Redline v5 desde la interfaz 
   3) Responder preguntas; al finalizar verás tu puntaje y el ranking.
 
 ## Consejos de uso
-- Los videos aceptan archivos locales o URLs válidas de YouTube/Vimeo.
-- Las portadas se optimizan automáticamente (tamaño y calidad).
-- Si notas errores de validación, revisa los mensajes en español debajo de cada campo.
+- Videos: archivo local o URL YouTube/Vimeo válida.
+- Portadas: se optimizan automáticamente.
+- Validaciones: revisa los mensajes debajo de cada campo.
 
 Para más detalles técnicos, consulta el README del proyecto.
