@@ -112,7 +112,6 @@ Cada pantalla mantiene una estructura coherente basada en Blade y Tailwind.
 
 Consulta `docs/DB_DIAGRAM.md` para una descripción de tablas y relaciones y un ejemplo en Mermaid.
 
-<!-- Sección de video demo eliminada a solicitud del autor -->
 
 ## Checklist de despliegue
 
