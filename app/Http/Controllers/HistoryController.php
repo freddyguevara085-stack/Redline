@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Illuminate\Validation\ValidationException;
 use Intervention\Image\Facades\Image;
 use App\Support\VideoEmbed;
 
@@ -144,6 +145,8 @@ class HistoryController extends Controller
         $data['user_id'] = auth()->id();
         $data['slug'] = Str::slug($data['title']) . '-' . uniqid();
 
+        $this->assertValidCover($r->file('cover'));
+
         if ($r->hasFile('cover')) {
             $data['cover_path'] = $this->storeCover($r->file('cover'));
         }
@@ -202,6 +205,8 @@ class HistoryController extends Controller
             }],
         ]);
 
+        $this->assertValidCover($r->file('cover'));
+
         if ($r->hasFile('cover')) {
             $this->deleteCover($historia->cover_path);
             $data['cover_path'] = $this->storeCover($r->file('cover'));
@@ -234,6 +239,30 @@ class HistoryController extends Controller
             'Content-Type' => $mimeType,
             'Content-Length' => strlen($contents),
             'Cache-Control' => 'max-age=604800, public',
+        ]);
+    }
+
+    protected function assertValidCover(?UploadedFile $file): void
+    {
+        if (! $file) {
+            return;
+        }
+
+        if ($file->isValid()) {
+            return;
+        }
+
+        $message = match ($file->getError()) {
+            UPLOAD_ERR_INI_SIZE, UPLOAD_ERR_FORM_SIZE => 'La imagen supera el límite permitido por la configuración del servidor. Aumenta upload_max_filesize y post_max_size, o usa un archivo más liviano.',
+            UPLOAD_ERR_PARTIAL => 'La imagen solo se subió parcialmente. Intenta de nuevo.',
+            UPLOAD_ERR_NO_TMP_DIR => 'Falta el directorio temporal del servidor para procesar la imagen.',
+            UPLOAD_ERR_CANT_WRITE => 'No se pudo guardar la imagen en disco. Revisa los permisos de escritura.',
+            UPLOAD_ERR_EXTENSION => 'Una extensión del servidor bloqueó la subida de la imagen.',
+            default => 'No se pudo subir la imagen (código ' . $file->getError() . ').',
+        };
+
+        throw ValidationException::withMessages([
+            'cover' => $message,
         ]);
     }
 
