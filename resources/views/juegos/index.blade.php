@@ -41,7 +41,7 @@
                         <h3>{{ $g->title }}</h3>
                         @php($plays = $g->plays_count ?? 0)
                         <div class="collection-tags" style="margin: 0.6rem 0 0.8rem;">
-                            <span class="pill pill--accent">{{ ucfirst($g->type ?? 'Trivia') }}</span>
+                            <span class="pill pill--accent">{{ $g->type_label }}</span>
                             <span class="pill pill--outline">{{ $questionCount }} preguntas</span>
                             <span class="pill pill--muted">{{ $g->points_per_question }} pts</span>
                             <span class="pill">{{ $plays }} partidas</span>

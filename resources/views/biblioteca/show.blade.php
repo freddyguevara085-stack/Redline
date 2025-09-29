@@ -69,7 +69,7 @@
     @auth
       <form method="POST" action="{{ route('biblioteca.addComment', $item) }}" class="form-panel" style="margin-bottom: 1.5rem;">
         @csrf
-        <div class="field-block">
+        <div class="field-block field-block--full">
           <label class="field-label" for="comment">Comparte tu opinión</label>
           <textarea id="comment" name="body" class="input" rows="3" placeholder="Escribe un comentario..." required></textarea>
         </div>

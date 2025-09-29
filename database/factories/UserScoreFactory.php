@@ -23,7 +23,7 @@ class UserScoreFactory extends Factory
             'score' => $this->faker->numberBetween(0, 1000),
             'quizzes_taken' => $this->faker->numberBetween(0, 25),
             'games_played' => $this->faker->numberBetween(0, 20),
-            'source' => $this->faker->optional()->randomElement(['quiz', 'trivia', 'memoria', 'ranking']),
+            'source' => $this->faker->optional()->randomElement(['quiz', 'memoria', 'ranking']),
         ];
     }
 }

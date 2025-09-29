@@ -19,7 +19,7 @@
     </div>
     <form method="POST" action="{{ route('juegos.optionStore',[$game,$question]) }}" class="form-panel">
       @csrf
-      <div class="field-block">
+      <div class="field-block field-block--full">
         <label for="text" class="field-label">Texto</label>
         <input type="text" id="text" name="text" class="input" placeholder="Escribe la posible respuesta" required>
       </div>

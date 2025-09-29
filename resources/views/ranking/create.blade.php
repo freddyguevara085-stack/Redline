@@ -19,19 +19,19 @@
     </div>
     <form method="POST" action="{{ route('historia.store') }}" enctype="multipart/form-data" class="form-panel">
       @csrf
-      <div class="field-block">
+      <div class="field-block field-block--full">
         <label class="field-label" for="title">Título</label>
         <input type="text" id="title" name="title" class="input" placeholder="Título" required>
       </div>
-      <div class="field-block">
+      <div class="field-block field-block--full">
         <label class="field-label" for="excerpt">Extracto</label>
         <textarea id="excerpt" name="excerpt" class="input" placeholder="Resumen breve"></textarea>
       </div>
-      <div class="field-block">
+      <div class="field-block field-block--full">
         <label class="field-label" for="content">Contenido</label>
         <textarea id="content" name="content" class="input" placeholder="Contenido completo" rows="6"></textarea>
       </div>
-      <div class="field-block">
+      <div class="field-block field-block--full">
         <label class="field-label" for="cover">Imagen de portada</label>
         <input type="file" id="cover" name="cover" class="input">
       </div>

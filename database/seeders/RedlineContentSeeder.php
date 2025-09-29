@@ -575,7 +575,7 @@ TEXT,
                     'title' => 'Quiz de Independencia',
                     'description' => 'Pon a prueba tus conocimientos sobre el proceso independentista de Nicaragua.',
                     'points_per_question' => 10,
-                    'type' => 'trivia',
+                    'type' => 'quiz',
                     'author_email' => 'natalia.quiz@redline.test',
                     'questions' => [
                         [
@@ -612,7 +612,7 @@ TEXT,
                     'title' => 'Quiz de Revolución Sandinista',
                     'description' => 'Preguntas sobre el Frente Sandinista y la lucha contra la dictadura somocista.',
                     'points_per_question' => 15,
-                    'type' => 'juicio',
+                    'type' => 'quiz',
                     'author_email' => 'ricardo.sandino@redline.test',
                     'questions' => [
                         [
@@ -649,7 +649,7 @@ TEXT,
                     'title' => 'Quiz Batalla de San Jacinto',
                     'description' => 'Preguntas sobre la defensa nicaragüense contra los filibusteros de William Walker.',
                     'points_per_question' => 20,
-                    'type' => 'ruleta',
+                    'type' => 'memoria',
                     'author_email' => 'adriana.guerras@redline.test',
                     'questions' => [
                         [
@@ -723,7 +723,7 @@ TEXT,
                     'title' => 'Quiz sobre Rubén Darío',
                     'description' => 'Preguntas sobre la vida y obra del Príncipe de las Letras Castellanas.',
                     'points_per_question' => 12,
-                    'type' => 'trivia',
+                    'type' => 'quiz',
                     'author_email' => 'ernesto.personajes@redline.test',
                     'questions' => [
                         [
@@ -760,7 +760,7 @@ TEXT,
                     'title' => 'Quiz Gastronomía de Cuaresma',
                     'description' => 'Identifica ingredientes y tradiciones culinarias nicaragüenses durante la vigilia.',
                     'points_per_question' => 8,
-                    'type' => 'ruleta',
+                    'type' => 'quiz',
                     'author_email' => 'martin.educacion@redline.test',
                     'questions' => [
                         [
@@ -801,7 +801,7 @@ TEXT,
                         'user_id' => $authorIds->get($gameData['author_email']) ?? $authorIds->first(),
                         'description' => $gameData['description'],
                         'points_per_question' => $gameData['points_per_question'],
-                        'type' => $gameData['type'] ?? 'trivia',
+                        'type' => $gameData['type'] ?? 'quiz',
                         'created_at' => $now,
                         'updated_at' => $now,
                     ]

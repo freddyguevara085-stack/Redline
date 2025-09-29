@@ -31,7 +31,7 @@
     <div class="section-heading">
       <h2>Configuración</h2>
       <div style="display: flex; gap: 0.6rem; flex-wrap: wrap;">
-        <span class="tag">{{ ucfirst($game->type ?? 'trivia') }}</span>
+  <span class="tag">{{ $game->type_label }}</span>
         <span class="tag">{{ $game->points_per_question }} pts / pregunta</span>
         <span class="tag">{{ $questionCount }} preguntas</span>
         <span class="tag">{{ $game->plays_count ?? 0 }} partidas</span>

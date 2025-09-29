@@ -67,16 +67,6 @@
         </div>
 
         <div class="filter-form__field form-group">
-          <x-label for="category" :value="'Categoría temática'" />
-          <select id="category" class="input" name="category">
-            <option value="">Todas las categorías</option>
-            @foreach($categories as $category)
-              <option value="{{ $category->slug }}" @selected($selectedCategory === $category->slug)>{{ $category->name }}</option>
-            @endforeach
-          </select>
-        </div>
-
-        <div class="filter-form__field form-group">
           <x-label for="eraFilter" :value="'Época histórica'" />
           <select id="eraFilter" class="input" name="era">
             <option value="">Todas las épocas</option>

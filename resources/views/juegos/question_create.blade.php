@@ -19,7 +19,7 @@
     </div>
     <form method="POST" action="{{ route('juegos.questionStore',$game) }}" class="form-panel">
       @csrf
-      <div class="field-block">
+      <div class="field-block field-block--full">
         <label for="statement" class="field-label">¿Cuál es la pregunta?</label>
         <input type="text" id="statement" name="statement" class="input" placeholder="Escribe el enunciado" required>
       </div>

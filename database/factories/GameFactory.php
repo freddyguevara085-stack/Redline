@@ -20,7 +20,7 @@ class GameFactory extends Factory
             'title' => $this->faker->unique()->sentence(3),
             'description' => $this->faker->paragraph(),
             'points_per_question' => $this->faker->randomElement([5, 10, 15, 20]),
-            'type' => $this->faker->randomElement(['trivia','ruleta','juicio','memoria']),
+            'type' => $this->faker->randomElement(['quiz','memoria']),
         ];
     }
 }

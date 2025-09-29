@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Redline v5 · Vista previa de 3 pantallas</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg-base: #03141f;
+      --bg-panel: rgba(8, 24, 33, 0.82);
+      --accent: #7ec850;
+      --accent-strong: #0d6c8a;
+      --text-primary: #e2f1f4;
+      --text-muted: #8eb0bd;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Poppins", "Inter", system-ui, sans-serif;
+      min-height: 100vh;
+      background: radial-gradient(circle at top, rgba(13, 108, 138, 0.18), transparent 50%),
+        radial-gradient(circle at bottom, rgba(126, 200, 80, 0.2), transparent 56%),
+        var(--bg-base);
+      color: var(--text-primary);
+    }
+
+    .app-shell {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    nav {
+      position: sticky;
+      top: 0;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      gap: 1rem;
+      background: rgba(11, 14, 29, 0.78);
+      border-bottom: 1px solid rgba(148, 163, 184, 0.22);
+      backdrop-filter: blur(16px);
+      z-index: 20;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-weight: 700;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .brand span {
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+    }
+
+    .nav-links button {
+      border: 1px solid transparent;
+      padding: 0.55rem 1.25rem;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.76);
+      color: inherit;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      cursor: pointer;
+      transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+    }
+
+    .nav-links button:hover,
+    .nav-links button[aria-pressed="true"] {
+      border-color: rgba(126, 200, 80, 0.4);
+      background: rgba(126, 200, 80, 0.18);
+      transform: translateY(-1px);
+    }
+
+    main {
+      flex: 1;
+      padding: clamp(2rem, 1.6rem + 2vw, 3.5rem) 0;
+    }
+
+    .page-shell {
+      width: min(1100px, 92vw);
+      margin: 0 auto;
+      display: grid;
+      gap: 2.2rem;
+    }
+
+    section[data-screen] {
+      display: none;
+    }
+
+    section[data-screen].is-active {
+      display: grid;
+      gap: 1.8rem;
+      animation: fadeIn 180ms ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .glass-panel {
+      background: var(--bg-panel);
+      border-radius: 26px;
+      border: 1px solid rgba(99, 123, 135, 0.24);
+      padding: clamp(1.6rem, 1.3rem + 1vw, 2.4rem);
+      backdrop-filter: blur(22px);
+      box-shadow: 0 26px 52px rgba(5, 9, 16, 0.55);
+    }
+
+    .section-heading {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 1rem;
+    }
+
+    .section-heading h2 {
+      margin: 0;
+      font-size: 1.6rem;
+    }
+
+    .muted {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    .hero-grid {
+      display: grid;
+      gap: 1.6rem;
+    }
+
+    @media (min-width: 860px) {
+      .hero-grid {
+        grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+      }
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.35rem 0.8rem;
+      border-radius: 999px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      background: rgba(148, 163, 184, 0.2);
+      border: 1px solid rgba(148, 163, 184, 0.35);
+    }
+
+    .card-grid {
+      display: grid;
+      gap: 1.2rem;
+    }
+
+    @media (min-width: 768px) {
+      .card-grid {
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      }
+    }
+
+    .feature-card {
+      border-radius: 20px;
+      border: 1px solid rgba(148, 163, 184, 0.25);
+      background: rgba(9, 18, 30, 0.85);
+      padding: 1.4rem 1.5rem;
+      display: grid;
+      gap: 0.65rem;
+      box-shadow: 0 20px 38px rgba(5, 9, 16, 0.45);
+    }
+
+    .feature-card h3 {
+      margin: 0;
+      font-size: 1.18rem;
+    }
+
+    .btn-row {
+      display: inline-flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      padding: 0.65rem 1.35rem;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      text-decoration: none;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .btn-primary {
+      background: linear-gradient(120deg, var(--accent), var(--accent-strong));
+      color: #ffffff;
+      box-shadow: 0 18px 36px rgba(13, 108, 138, 0.32);
+    }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--text-primary);
+      border: 1px solid rgba(126, 200, 80, 0.35);
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+    }
+
+    footer {
+      padding: 2rem;
+      text-align: center;
+      color: rgba(142, 176, 189, 0.72);
+      font-size: 0.85rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <nav>
+      <a href="#" class="brand" aria-label="Redline v5">
+        <span>Redline v5</span>
+      </a>
+      <div class="nav-links" role="tablist">
+        <button type="button" role="tab" aria-controls="dashboard" aria-pressed="true" data-screen-trigger="dashboard">Dashboard</button>
+        <button type="button" role="tab" aria-controls="historia" aria-pressed="false" data-screen-trigger="historia">Historias</button>
+        <button type="button" role="tab" aria-controls="juegos" aria-pressed="false" data-screen-trigger="juegos">Juegos & Ranking</button>
+      </div>
+    </nav>
+
+    <main>
+      <div class="page-shell">
+        <section id="dashboard" data-screen class="is-active" aria-labelledby="Dashboard">
+          <div class="glass-panel hero-grid">
+            <div>
+              <span class="pill">Bienvenida</span>
+              <h1>Hola Lina, continúa tu travesía histórica</h1>
+              <p class="muted">Revisa tu progreso semanal, completa un reto y escala en el ranking para desbloquear nuevas insignias.</p>
+              <div class="btn-row">
+                <a class="btn btn-primary" href="#">Comenzar un quiz</a>
+                <a class="btn btn-ghost" href="#juegos">Ver ranking</a>
+              </div>
+            </div>
+            <div class="feature-card" style="background: rgba(10, 22, 34, 0.9);">
+              <h3>Resumen rápido</h3>
+              <p class="muted">Tu desempeño en los últimos 7 días.</p>
+              <div class="card-grid" style="grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));">
+                <div>
+                  <span class="muted">Puntaje total</span>
+                  <h2 style="margin: 0; font-size: 2rem;">1 240 pts</h2>
+                </div>
+                <div>
+                  <span class="muted">Quizzes completados</span>
+                  <h2 style="margin: 0; font-size: 2rem;">18</h2>
+                </div>
+                <div>
+                  <span class="muted">Posición actual</span>
+                  <h2 style="margin: 0; font-size: 2rem;">#4</h2>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="glass-panel">
+            <div class="section-heading">
+              <h2>Accesos rápidos</h2>
+              <span class="muted">Todo lo esencial a un clic.</span>
+            </div>
+            <div class="card-grid">
+              <article class="feature-card">
+                <h3>Historias destacadas</h3>
+                <p class="muted">Lee los relatos más votados por la comunidad esta semana.</p>
+                <a href="#historia" class="btn btn-ghost">Explorar historias</a>
+              </article>
+              <article class="feature-card">
+                <h3>Biblioteca multimedia</h3>
+                <p class="muted">Accede a documentos, imágenes y audios curados.</p>
+                <a href="#" class="btn btn-ghost">Ir a biblioteca</a>
+              </article>
+              <article class="feature-card">
+                <h3>Agenda histórica</h3>
+                <p class="muted">Consulta eventos en vivo y registra tu asistencia.</p>
+                <a href="#" class="btn btn-ghost">Ver calendario</a>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <section id="historia" data-screen aria-labelledby="Historias">
+          <div class="glass-panel hero-grid">
+            <div>
+              <span class="pill">Colección histórica</span>
+              <h1>Historias y recuerdos</h1>
+              <p class="muted">Explora relatos, épocas y protagonistas clave que construyen la memoria colectiva.</p>
+              <div class="btn-row">
+                <a class="btn btn-primary" href="#">Publicar historia</a>
+                <a class="btn btn-ghost" href="#">Ver tutorial</a>
+              </div>
+            </div>
+            <div class="feature-card" style="background: rgba(15, 28, 46, 0.9);">
+              <span class="pill">Destacada</span>
+              <h3>El pacto de la colina azul</h3>
+              <p class="muted">Una crónica colaborativa sobre la alianza que cambió el rumbo de la región en 1894.</p>
+              <div class="btn-row">
+                <a href="#" class="btn btn-primary">Leer ahora</a>
+                <a href="#" class="btn btn-ghost">Ver colección</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="glass-panel">
+            <div class="section-heading">
+              <h2>Filtrar historias</h2>
+              <span class="muted">Encuentra contenidos por época o protagonista.</span>
+            </div>
+            <div class="card-grid" style="grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));">
+              <div class="feature-card">
+                <h3>Siglo XIX</h3>
+                <p class="muted">23 historias disponibles</p>
+              </div>
+              <div class="feature-card">
+                <h3>Movimiento estudiantil</h3>
+                <p class="muted">12 historias disponibles</p>
+              </div>
+              <div class="feature-card">
+                <h3>Protagonistas femeninas</h3>
+                <p class="muted">18 historias disponibles</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="glass-panel">
+            <div class="section-heading">
+              <h2>Historias recientes</h2>
+              <a class="btn btn-ghost" href="#">Ver todas</a>
+            </div>
+            <div class="card-grid">
+              <article class="feature-card">
+                <h3>La bitácora del navegante</h3>
+                <p class="muted">Notas inéditas sobre la primera expedición a la costa norte.</p>
+                <span class="pill">Publicado hace 3 días</span>
+              </article>
+              <article class="feature-card">
+                <h3>Cartas desde la frontera</h3>
+                <p class="muted">Correspondencia recuperada entre líderes comunitarios.</p>
+                <span class="pill">Publicado hace 5 días</span>
+              </article>
+              <article class="feature-card">
+                <h3>El mural de la estación</h3>
+                <p class="muted">Cómo una obra colectiva se transformó en símbolo cultural.</p>
+                <span class="pill">Publicado hace 1 semana</span>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <section id="juegos" data-screen aria-labelledby="Juegos y Ranking">
+          <div class="glass-panel hero-grid">
+            <div>
+              <span class="pill">Zona de juego</span>
+              <h1>Retos, memoria y trivia</h1>
+              <p class="muted">Participa en juegos de preguntas y memoriza parejas para acumular puntos y ganar insignias.</p>
+              <div class="btn-row">
+                <a class="btn btn-primary" href="#">Crear nuevo juego</a>
+                <a class="btn btn-ghost" href="#">Ver tutorial</a>
+              </div>
+            </div>
+            <div class="feature-card" style="background: rgba(10, 24, 39, 0.88);">
+              <h3>Ranking semanal</h3>
+              <p class="muted">Top 5 jugadores por puntaje acumulado.</p>
+              <div class="card-grid">
+                <div>
+                  <span class="muted">1er lugar</span>
+                  <h2 style="margin: 0; font-size: 1.6rem;">Ana · 1 860 pts</h2>
+                </div>
+                <div>
+                  <span class="muted">Tu posición</span>
+                  <h2 style="margin: 0; font-size: 1.6rem;">#4 · 1 240 pts</h2>
+                </div>
+              </div>
+              <a href="#" class="btn btn-ghost" style="margin-top: 0.8rem;">Ver ranking completo</a>
+            </div>
+          </div>
+
+          <div class="glass-panel">
+            <div class="section-heading">
+              <h2>Catálogo de juegos</h2>
+              <span class="muted">Selecciona el modo que prefieras.</span>
+            </div>
+            <div class="card-grid">
+              <article class="feature-card">
+                <span class="pill">Quiz</span>
+                <h3>Grandes fechas</h3>
+                <p class="muted">Preguntas de opción múltiple para reforzar lineas de tiempo.</p>
+                <a href="#" class="btn btn-primary">Jugar ahora</a>
+              </article>
+              <article class="feature-card">
+                <span class="pill">Memoria</span>
+                <h3>Personajes y logros</h3>
+                <p class="muted">Empareja protagonistas históricos con su contribución.</p>
+                <a href="#" class="btn btn-primary">Jugar ahora</a>
+              </article>
+              <article class="feature-card">
+                <span class="pill">Quiz</span>
+                <h3>Arte y cultura</h3>
+                <p class="muted">Descubre obras, autores y sus contextos.</p>
+                <a href="#" class="btn btn-primary">Jugar ahora</a>
+              </article>
+            </div>
+          </div>
+
+          <div class="glass-panel">
+            <div class="section-heading">
+              <h2>Cómo sumar puntos</h2>
+            </div>
+            <div class="card-grid" style="grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));">
+              <div class="feature-card">
+                <h3>Completa quizzes diarios</h3>
+                <p class="muted">10 preguntas rápidas que se actualizan cada mañana.</p>
+              </div>
+              <div class="feature-card">
+                <h3>Memoria colaborativa</h3>
+                <p class="muted">Crea pares personalizados y reta a tus compañeros.</p>
+              </div>
+              <div class="feature-card">
+                <h3>Comparte tus resultados</h3>
+                <p class="muted">Publica tu puntaje para desbloquear insignias exclusivas.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <footer>
+      Vista previa estática · Redline v5 · Septiembre 2025
+    </footer>
+  </div>
+
+  <script>
+    const triggers = document.querySelectorAll('[data-screen-trigger]');
+    const screens = document.querySelectorAll('section[data-screen]');
+
+    triggers.forEach((trigger) => {
+      trigger.addEventListener('click', () => {
+        const target = trigger.dataset.screenTrigger;
+
+        triggers.forEach((btn) => btn.setAttribute('aria-pressed', String(btn === trigger)));
+        screens.forEach((screen) => {
+          const isMatch = screen.id === target;
+          screen.classList.toggle('is-active', isMatch);
+          screen.setAttribute('aria-hidden', String(!isMatch));
+        });
+
+        const active = document.getElementById(target);
+        if (active) {
+          active.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
+  </script>
+</body>
+</html>

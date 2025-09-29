@@ -9,7 +9,7 @@ return new class extends Migration {
     {
         Schema::table('games', function (Blueprint $table) {
             if (!Schema::hasColumn('games', 'type')) {
-                $table->string('type', 40)->default('trivia')->after('points_per_question');
+                $table->string('type', 40)->default('quiz')->after('points_per_question');
                 $table->index('type');
             }
         });

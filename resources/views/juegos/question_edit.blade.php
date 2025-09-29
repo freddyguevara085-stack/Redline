@@ -20,7 +20,7 @@
     <form method="POST" action="{{ route('juegos.questionUpdate',[$game,$question]) }}" class="form-panel">
       @csrf
       @method('PUT')
-      <div class="field-block">
+      <div class="field-block field-block--full">
         <label for="statement" class="field-label">Enunciado</label>
         <input type="text" id="statement" name="statement" class="input" value="{{ old('statement',$question->statement) }}" required>
       </div>

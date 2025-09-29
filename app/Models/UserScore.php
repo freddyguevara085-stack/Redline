@@ -19,8 +19,25 @@ class UserScore extends Model
         'source',
     ];
 
+    protected $casts = [
+        'points' => 'integer',
+        'score' => 'integer',
+        'quizzes_taken' => 'integer',
+        'games_played' => 'integer',
+    ];
+
     public function user()
     {
         return $this->belongsTo(\App\Models\User::class);
+    }
+
+    public function getAverageScoreAttribute(): float
+    {
+        $games = $this->games_played ?? 0;
+        if ($games <= 0) {
+            return 0.0;
+        }
+
+        return round(($this->score ?? 0) / $games, 1);
     }
 }

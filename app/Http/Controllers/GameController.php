@@ -6,6 +6,7 @@ use App\Models\Game;
 use App\Models\Question;
 use App\Models\Option;
 use App\Models\GameAttempt;
+use App\Models\UserScore;
 use Illuminate\Http\Request;
 
 class GameController extends Controller
@@ -40,8 +41,32 @@ class GameController extends Controller
             'points_per_question'=>'required|integer|min:1',
             'type' => 'required|in:'.implode(',', \App\Models\Game::TYPES),
         ]);
+
+        [$normalizedQuestions, $questionErrors] = $this->normalizeQuestionPayload(
+            $r->input('questions', []),
+            $data['type']
+        );
+
+        if (! empty($questionErrors)) {
+            return back()->withErrors($questionErrors)->withInput();
+        }
+
         $data['user_id'] = auth()->id();
         $game = Game::create($data);
+
+        foreach ($normalizedQuestions as $questionData) {
+            $question = $game->questions()->create([
+                'statement' => $questionData['statement'],
+            ]);
+
+            foreach ($questionData['options'] as $optionData) {
+                $question->options()->create([
+                    'text' => $optionData['text'],
+                    'is_correct' => $optionData['is_correct'],
+                ]);
+            }
+        }
+
         return redirect()->route('juegos.show',$game)->with('ok','Juego creado');
     }
 
@@ -182,20 +207,39 @@ class GameController extends Controller
     {
         $game->load(['questions.options']);
 
-        if ($game->questions->isEmpty()) {
-            return redirect()
-                ->route('juegos.show', $game)
-                ->withErrors(['play' => 'Este juego aún no tiene preguntas disponibles.']);
+        $questions = $game->questions;
+
+        if ($game->type === 'memoria') {
+            $questions = $questions
+                ->filter(fn ($question) => $question->options->firstWhere('is_correct', true))
+                ->values();
         }
 
-        return view('juegos.play', compact('game'));
+        if ($questions->isEmpty()) {
+            return redirect()
+                ->route('juegos.show', $game)
+                ->withErrors(['play' => 'Este juego aún no tiene preguntas disponibles. Añade opciones correctas para activar el modo seleccionado.']);
+        }
+
+        return view('juegos.play', [
+            'game' => $game,
+            'questionList' => $questions,
+        ]);
     }
 
     public function submit(Request $r, Game $game)
     {
         $game->load(['questions.options']);
 
-        if ($game->questions->isEmpty()) {
+        $questions = $game->questions;
+
+        if ($game->type === 'memoria') {
+            $questions = $questions
+                ->filter(fn ($question) => $question->options->firstWhere('is_correct', true))
+                ->values();
+        }
+
+        if ($questions->isEmpty()) {
             return redirect()
                 ->route('juegos.show', $game)
                 ->withErrors(['play' => 'No puedes enviar respuestas porque este juego no tiene preguntas disponibles.']);
@@ -213,16 +257,16 @@ class GameController extends Controller
         }
 
         $rules = [];
-        foreach ($game->questions as $question) {
+        foreach ($questions as $question) {
             $rules["q{$question->id}"] = ['required', 'integer', 'exists:options,id'];
         }
 
         $validated = $r->validate($rules);
 
-        $total = $game->questions->count();
+        $total = $questions->count();
         $correct = 0;
 
-        foreach ($game->questions as $q) {
+        foreach ($questions as $q) {
             $selectedId = (int) $validated["q{$q->id}"];
             $option = $q->options->firstWhere('id', $selectedId);
 
@@ -241,7 +285,7 @@ class GameController extends Controller
 
         $score = $correct * $game->points_per_question;
 
-        GameAttempt::create([
+        $attempt = GameAttempt::create([
             'game_id' => $game->id,
             'user_id' => optional($r->user())->id,
             'score' => $score,
@@ -250,7 +294,122 @@ class GameController extends Controller
             'played_at' => $now,
         ]);
 
+        if ($attempt->user_id) {
+            $userScore = UserScore::firstOrNew(['user_id' => $attempt->user_id]);
+
+            if (! $userScore->exists) {
+                $userScore->fill([
+                    'points' => 0,
+                    'score' => 0,
+                    'quizzes_taken' => 0,
+                    'games_played' => 0,
+                ]);
+            }
+
+            $userScore->game_id = $game->id;
+            $userScore->source = $game->type;
+            $userScore->games_played = ($userScore->games_played ?? 0) + 1;
+            $userScore->score = ($userScore->score ?? 0) + $score;
+            $userScore->points = ($userScore->points ?? 0) + $score;
+
+            if ($game->type === 'quiz') {
+                $userScore->quizzes_taken = ($userScore->quizzes_taken ?? 0) + 1;
+            }
+
+            $userScore->save();
+        }
+
         return view('juegos.result', compact('game','score','total','correct'));
+    }
+
+    protected function normalizeQuestionPayload(array $rawQuestions, string $type): array
+    {
+        $normalized = [];
+        $errors = [];
+
+        foreach ($rawQuestions as $index => $rawQuestion) {
+            $statement = trim($rawQuestion['statement'] ?? '');
+            $identifier = $index + 1;
+
+            $hasContent = $statement !== ''
+                || ! empty($rawQuestion['options'] ?? [])
+                || isset($rawQuestion['answer']);
+
+            if (! $hasContent) {
+                continue;
+            }
+
+            if ($statement === '') {
+                $errors["questions.{$index}.statement"] = "Ingresa el enunciado de la pregunta #{$identifier}.";
+                continue;
+            }
+
+            if ($type === 'quiz') {
+                $rawOptions = $rawQuestion['options'] ?? [];
+                $preparedOptions = [];
+
+                foreach ($rawOptions as $optionIndex => $optionData) {
+                    $text = trim($optionData['text'] ?? '');
+                    if ($text === '') {
+                        continue;
+                    }
+
+                    $preparedOptions[] = [
+                        'text' => $text,
+                        'key' => (string) $optionIndex,
+                    ];
+                }
+
+                if (count($preparedOptions) < 2) {
+                    $errors["questions.{$index}.options"] = "Agrega al menos dos opciones para la pregunta #{$identifier}.";
+                    continue;
+                }
+
+                $correctKey = isset($rawQuestion['correct_option'])
+                    ? (string) $rawQuestion['correct_option']
+                    : null;
+
+                $hasCorrect = false;
+                foreach ($preparedOptions as &$option) {
+                    $option['is_correct'] = $correctKey !== null && $option['key'] === $correctKey;
+                    if ($option['is_correct']) {
+                        $hasCorrect = true;
+                    }
+                }
+                unset($option);
+
+                if (! $hasCorrect) {
+                    $errors["questions.{$index}.correct_option"] = "Selecciona cuál opción es la correcta en la pregunta #{$identifier}.";
+                    continue;
+                }
+
+                $normalized[] = [
+                    'statement' => $statement,
+                    'options' => collect($preparedOptions)
+                        ->map(fn ($option) => [
+                            'text' => $option['text'],
+                            'is_correct' => $option['is_correct'],
+                        ])->all(),
+                ];
+            } else {
+                $answer = trim($rawQuestion['answer'] ?? '');
+
+                if ($answer === '') {
+                    $errors["questions.{$index}.answer"] = "Escribe la respuesta correcta para la carta #{$identifier}.";
+                    continue;
+                }
+
+                $normalized[] = [
+                    'statement' => $statement,
+                    'options' => [[
+                        'text' => $answer,
+                        'is_correct' => true,
+                    ]],
+                ];
+            }
+        }
+
+        return [$normalized, $errors];
     }
 
     protected function ensureQuestionBelongsToGame(Game $game, Question $question): void
